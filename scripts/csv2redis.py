@@ -778,7 +778,7 @@ class Csv2redisClass():
     dataSizes = self.checkSiblingSizes(keys)  # dataSizes: dict [geoHash:size]
     print("burstDeleteData dataSizes:", dataSizes, file=sys.stderr)
     self.burstCombine(dataSizes)
-    return ({"success": len(ans), "keys": keys})
+    return ({"success": ans, "keys": keys})
 
   def burstCombine(self, dataSizes):
     # 兄弟の合計がリミットを下回っていたら上のタイルに統合してしまう
