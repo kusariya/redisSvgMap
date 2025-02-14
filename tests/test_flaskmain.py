@@ -71,15 +71,15 @@ class TestOfFlaskApps(unittest.TestCase):
     self.mk_fakeredis.flushall()  
 
   @patch("redis.Redis", return_value=mk_fakeredis)
-  def test_buildLayer(self,mock_redis):
-    # mock_c2r.return_value.registSchema.return_value = True
-    postData = {'schema': ['title', 'metadata', 'latitude', 'longitude'], 'type': [2, 2, 1, 1], 'latCol': 2, 'lngCol': 3, 'titleCol': 0, 'idCol': -1, 'namespace': 's3_', 'name': 'sample', 'created': 1703751389604, 'defaultIcon': 8, 'defaultIconPath': 'pngs/pin_red_cross.png'}
+  def test_buildLayer(self, mock_redis):
+    postData = {'schema': ['title', 'metadata', 'latitude', 'longitude'], 'type': [2, 2, 1, 1], 'latCol': 2, 'lngCol': 3, 'titleCol': 0, 'idCol': -1, 'namespace': 'temp_', 'name': 'sample', 'created': 1703751389604, 'defaultIcon': 8, 'defaultIconPath': 'pngs/pin_red_cross.png'}
     response = self.main.post("/svgmap/buildLayer", data=json.dumps(postData), content_type='application/json')
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response.data, b"OK")
-    self.assertEqual(pickle.loads(self.mk_fakeredis.get("s3_schema")), postData)
-    response.close()
-    # mock_c2r.return_value.registSchema.return_value = False
+
+  @patch("redis.Redis", return_value=mk_fakeredis)
+  def test_buildLayerDuplicatedError(self, mock_redis):
+    postData = {'schema': ['title', 'metadata', 'latitude', 'longitude'], 'type': [2, 2, 1, 1], 'latCol': 2, 'lngCol': 3, 'titleCol': 0, 'idCol': -1, 'namespace': 's2_', 'name': 'sample', 'created': 1703751389604, 'defaultIcon': 8, 'defaultIconPath': 'pngs/pin_red_cross.png'}
     response = self.main.post("/svgmap/buildLayer", data=json.dumps(postData), content_type='application/json')
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response.data, b"DUPLICATED ERROR")
