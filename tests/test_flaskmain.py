@@ -10,8 +10,7 @@ import redis
 import pickle
 import fakeredis
 
-class TestOfFlaskApps(unittest.TestCase):
-  mk_fakeredis = fakeredis.FakeStrictRedis()
+class TestOfStaticFile(unittest.TestCase):
   def setUp(self):
     self.main = app.test_client()
 
@@ -27,6 +26,31 @@ class TestOfFlaskApps(unittest.TestCase):
   def test_access2rtDatasetPath(self):
     response = self.main.get("/dataset/show")
     self.assertEqual(response.status_code, 200)
+  
+  def test_access2IndexFile(self):
+    response = self.main.get("/svgmap/index.html")
+    self.assertEqual(response.status_code, 200)
+    response.close()
+    response = self.main.get("/svgmap/")
+    self.assertEqual(response.status_code, 200)
+    response.close()
+    response = self.main.get("/svgmap")
+    self.assertEqual(response.status_code, 200)
+    response.close()
+
+  def test_access2StaticImageFile(self):
+    response = self.main.get("/svgmap/pngs/pin_yellow.png")
+    self.assertEqual(response.status_code, 200)
+    response.close()
+    response = self.main.get("/svgmap/gps.png")
+    self.assertEqual(response.status_code, 200)
+    response.close()
+
+
+class TestOfFlaskApps(unittest.TestCase):
+  mk_fakeredis = fakeredis.FakeStrictRedis()
+  def setUp(self):
+    self.main = app.test_client()
 
   @patch("redis.Redis", return_value=mk_fakeredis)
   def test_buildLayer(self,mock_redis):
@@ -41,27 +65,6 @@ class TestOfFlaskApps(unittest.TestCase):
     response = self.main.post("/svgmap/buildLayer", data=json.dumps(postData), content_type='application/json')
     self.assertEqual(response.status_code, 200)
     self.assertEqual(response.data, b"DUPLICATED ERROR")
-    response.close()
-
-  @patch("redis.Redis", return_value=mk_fakeredis)
-  def test_access2IndexFile(self, mock_redis):
-    response = self.main.get("/svgmap/index.html")
-    self.assertEqual(response.status_code, 200)
-    response.close()
-    response = self.main.get("/svgmap/")
-    self.assertEqual(response.status_code, 200)
-    response.close()
-    response = self.main.get("/svgmap")
-    self.assertEqual(response.status_code, 200)
-    response.close()
-
-  @patch("redis.Redis", return_value=mk_fakeredis)
-  def test_access2StaticImageFile(self, mock_redis):
-    response = self.main.get("/svgmap/pngs/pin_yellow.png")
-    self.assertEqual(response.status_code, 200)
-    response.close()
-    response = self.main.get("/svgmap/gps.png")
-    self.assertEqual(response.status_code, 200)
     response.close()
 
   @patch("redis.Redis", return_value=fakeredis.FakeStrictRedis())
