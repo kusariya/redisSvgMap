@@ -26,6 +26,7 @@ class TestOfCsv2Redis(unittest.TestCase):
     self.c2r.registSchema(self.csvSchemaObj)
 
   def tearDown(self):
+    self.mk_fakeredis.flushall()
     self.c2r.closeCsvReader()
 
   @patch("redis.Redis", return_value=mk_fakeredis)
@@ -99,11 +100,10 @@ class TestOfCsv2Redis(unittest.TestCase):
       {'lat': 28.606111, 'lng': 127.923889, 'data': 'jp,a,A,47,-,28.606111,127.923889,26.606111,okinawa', 'hkey': 'jp,a,A,47,-,2860611,12792388,26.606111,okinawa'},
       {'lat': 29.606111, 'lng': 127.923889, 'data': 'jp,a,A,47,-,29.606111,127.923889,26.606111,okinawa', 'hkey': 'jp,a,A,47,-,2960611,12792388,26.606111,okinawa'},
     ]
-    # result = self.c2r.burstRegistData(data_case, 3)
-    # correct = {'keys': ['D', 'D', 'D', 'D'], 'success': 4}
-    # self.assertEqual(result, correct)
-
-    # self.assertEqual(self.f_redis.get("test_D"),"string")
+    result = self.c2r.burstRegistData(data_case, 3)
+    correct = {'keys': ['D', 'D', 'D', 'D'], 'success': 4}
+    self.assertEqual(result, correct)
+    self.assertEqual(self.mk_fakeredis.type("test_D"), b"hash")
     
   @patch("redis.Redis", return_value=mk_fakeredis)
   def test_getOneData(self, mock_redis):
