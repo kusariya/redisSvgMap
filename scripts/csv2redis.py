@@ -605,7 +605,6 @@ class Csv2redisClass():
       data = registDataList[j]["data"]
       if Csv2redisClass.UseRedisHash:
         hkey = registDataList[j]["hkey"]
-        print("INSERT DATA: ", self.ns + key, hkey, data)
         pipe.hset(
             self.ns + key, hkey, data
         )  # 緯度経度も含め全データをハッシュキーにしてたのは時として丸めが起きハッシュキーとして疑問ありなので、除外したものを"hkey"に入れる(これはスタンドアロンではgetOneDataで作っている。FlaskではgetDataで作っている)
@@ -689,13 +688,10 @@ class Csv2redisClass():
     # print ("keys:",keys)
     # print (registDataList)
     # 実際にデータを登録する
-    print("doko1?")
     ans = self.setDataList(registDataList, keys)
     # それぞれのタイルのデータの個数を調査する
-    print("doko2?")
     dataSizes = self.checkSizes(keys)  # dataSizes: dict [geoHash:size]
     # 一連の登録がすんだら、タイル再構築(quadTreeTiling)を行う
-    print("doko3?")
     self.burstQuadPart(dataSizes, maxLevel)
 
     print ("burstRegist: ",ans)
