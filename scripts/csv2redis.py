@@ -694,7 +694,7 @@ class Csv2redisClass():
     # 一連の登録がすんだら、タイル再構築(quadTreeTiling)を行う
     self.burstQuadPart(dataSizes, maxLevel)
 
-    print ("burstRegist: ",ans)
+    # print ("dataSizes:",dataSizes)
     return ({"success": len(ans), "keys": keys})
 
   def flushRegistData(self, maxLevel):
