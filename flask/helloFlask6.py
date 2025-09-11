@@ -1,3 +1,7 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 # Redis QuadTreeCompositeSVGMapシステムを、Flaskの完全に動的なサーバとして稼働させる試行
 # Programmed by Satoru Takagi
 # 2019/02/07 The 1st revision: すでに、小縮尺をベクタにするか、ラスタにするかが選べる実装になってるよ～

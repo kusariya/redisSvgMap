@@ -41,7 +41,12 @@ Python3 and Redis (and pip3 install redis hiredis numpy pillow flask)
 * ``python3 dbDump.py --restore``
 
 ## License
-This software is open source software under GPL Ver. 3. Please refer to the LICENSE file.
+
+This project is now licensed under the MPL-2.0 License.
+
+**License Update:**
+
+On 2025-09-11, the license was changed from GPLv3 to MPLv2 by contributor agreement, to allow for broader use, including commercial applications. See [LICENSE](LICENSE) or [MPL 2.0](https://www.mozilla.org/en-US/MPL/2.0/) for details.
 
 ## Sample data
 * The World Cities Database produced by MaxMind is included as sample data. The following is its declaration.
